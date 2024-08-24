@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard App</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Flashcard Styles */
+        .flashcards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .flashcard {
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+            perspective: 1000px;
+        }
+
+        .flashcard-inner {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .flashcard:hover .flashcard-inner,
+        .flashcard.flip .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Form -->
+    <div id="login-container" class="container">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Flashcard Creation Form -->
+    <div id="flashcard-container" class="container" style="display: none;">
+        <h2>Create a Flashcard</h2>
+        <input type="text" id="front" placeholder="Front of flashcard" required>
+        <input type="text" id="back" placeholder="Back of flashcard" required>
+        <button onclick="createFlashcard()">Create Flashcard</button>
+
+        <!-- Flashcards Display -->
+        <div id="flashcards" class="flashcards"></div>
+    </div>
+
+    <script>
+        function login() {
+            const email = document.getElementById('email').value;
+            if (email) {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('flashcard-container').style.display = 'block';
+            } else {
+                alert("Please enter your email.");
+            }
+        }
+
+        function createFlashcard() {
+            const frontText = document.getElementById('front').value;
+            const backText = document.getElementById('back').value;
+            if (frontText && backText) {
+                const flashcard = document.createElement('div');
+                flashcard.className = 'flashcard';
+
+                const flashcardInner = document.createElement('div');
+                flashcardInner.className = 'flashcard-inner';
+
+                const flashcardFront = document.createElement('div');
+                flashcardFront.className = 'flashcard-front';
+                flashcardFront.textContent = frontText;
+
+                const flashcardBack = document.createElement('div');
+                flashcardBack.className = 'flashcard-back';
+                flashcardBack.textContent = backText;
+
+                flashcardInner.appendChild(flashcardFront);
+                flashcardInner.appendChild(flashcardBack);
+                flashcard.appendChild(flashcardInner);
+
+                flashcard.addEventListener('click', function() {
+                    this.classList.toggle('flip');
+                });
+
+                document.getElementById('flashcards').appendChild(flashcard);
+
+                // Clear input fields
+                document.getElementById('front').value = '';
+                document.getElementById('back').value = '';
+            } else {
+                alert("Please fill out both fields.");
+            }
+        }
+    </script>
+</body>
+</html>
